@@ -91,6 +91,3 @@ The `main.py` script will automatically train the XGBoost model and save it as `
 - **Model**: If you wish to use a different machine learning model, you can modify the `train_and_save_models` function in `main.py` and ensure your new model is saved as `model_xgb.pkl` (or update the loading path).
 - **Dataset**: Replace `garments_worker_productivity.csv` in the `content/` directory with your own dataset if you want to predict based on different data. Ensure your data columns match the expected input features.
 
-## Contact
-
-For any questions or feedback, please contact Shubham Prajapati at 220703shubham@gmail.com.
