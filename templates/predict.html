@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predict Productivity - Employee Productivity Prediction Using ML</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for gradients and animations not easily done with pure Tailwind */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .prediction-background {
+            /* Replaced predict.png with a vibrant gradient */
+            background: linear-gradient(135deg, #00BCD4 0%, #007BFF 100%); /* Cyan to Blue gradient */
+            position: relative;
+            overflow: hidden;
+        }
+
+        .prediction-background::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+            animation: pulse-gradient 15s infinite alternate; /* Subtle animation */
+            z-index: 1;
+        }
+
+        @keyframes pulse-gradient {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(1.2); opacity: 0.6; }
+        }
+
+        .prediction-container {
+            animation: fade-in-up 1s ease-out forwards; /* Fade in animation */
+        }
+
+        @keyframes fade-in-up {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col bg-gray-50 text-gray-900">
+    <!-- Navigation Bar -->
+    <nav class="flex justify-between items-center bg-gray-200 px-4 py-4 md:px-6 fixed w-full top-0 z-50 shadow-lg border-b border-gray-300">
+        <span class="text-gray-800 text-xl md:text-2xl font-bold tracking-wider">Employee Productivity AI</span>
+        <div class="flex gap-4">
+            <a href="./" class="text-gray-700 bg-transparent px-3 py-2 md:px-4 md:py-2 rounded-xl transition-all duration-300 ease-in-out transform hover:-translate-y-0.5 hover:bg-gray-300 hover:text-blue-600 hover:shadow-md">Home</a>
+            <a href="./about" class="text-gray-700 bg-transparent px-3 py-2 md:px-4 md:py-2 rounded-xl transition-all duration-300 ease-in-out transform hover:-translate-y-0.5 hover:bg-gray-300 hover:text-blue-600 hover:shadow-md">About</a>
+            <a href="./predict" class="text-blue-600 bg-blue-100 px-3 py-2 md:px-4 md:py-2 rounded-xl shadow-md transition-all duration-300 ease-in-out transform hover:-translate-y-0.5 hover:shadow-lg">Predict</a>
+        </div>
+    </nav>
+
+    <!-- Prediction Form Section -->
+    <div class="prediction-background flex items-center justify-center p-4 pt-16 md:pt-24 min-h-screen">
+        <div class="prediction-container relative z-10 bg-white bg-opacity-95 p-8 md:p-10 rounded-3xl shadow-2xl w-full max-w-2xl mx-auto border border-gray-300 transform transition-all duration-600 ease-in-out hover:-translate-y-2 hover:shadow-3xl">
+            <h2 class="text-3xl md:text-4xl font-extrabold text-center text-gray-800 mb-8 drop-shadow-md">Predict Employee Productivity</h2>
+            <form action="/pred" method="POST">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+                    <!-- Quarter -->
+                    <div>
+                        <label for="quarter" class="block text-gray-700 text-sm font-semibold mb-2">Quarter</label>
+                        <input type="number" id="quarter" name="quarter" placeholder="e.g., 1, 2, 3, 4" required class="w-full p-3 border border-gray-300 rounded-lg bg-gray-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
+                    </div>
+                    <!-- Department -->
+                    <div>
+                        <label for="department" class="block text-gray-700 text-sm font-semibold mb-2">Department</label>
+                        <select id="department" name="department" required class="w-full p-3 border border-gray-300 rounded-lg bg-gray-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 appearance-none">
+                            <option value="">Select Department</option>
+                            <option value="finishing">Finishing</option>
+                            <option value="sweing">Sweing</option>
+                        </select>
+                    </div>
+                    <!-- Day -->
+                    <div>
+                        <label for="day" class="block text-gray-700 text-sm font-semibold mb-2">Day</label>
+                        <input type="number" id="day" name="day" placeholder="e.g., 1 (Mon) to 7 (Sun)" required class="w-full p-3 border border-gray-300 rounded-lg bg-gray-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
+                    </div>
+                    <!-- Team -->
+                    <div>
+                        <label for="team" class="block text-gray-700 text-sm font-semibold mb-2">Team</label>
+                        <input type="number" id="team" name="team" placeholder="e.g., 1 to 12" required class="w-full p-3 border border-gray-300 rounded-lg bg-gray-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
+                    </div>
+                    <!-- Targeted Productivity -->
+                    <div>
+                        <label for="targeted_productivity" class="block text-gray-700 text-sm font-semibold mb-2">Targeted Productivity</label>
+                        <input type="number" step="0.01" id="targeted_productivity" name="targeted_productivity" placeholder="e.g., 0.8" required class="w-full p-3 border border-gray-300 rounded-lg bg-gray-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
+                    </div>
+                    <!-- SMV -->
+                    <div>
+                        <label for="smv" class="block text-gray-700 text-sm font-semibold mb-2">SMV (Standard Minute Value)</label>
+                        <input type="number" step="0.01" id="smv" name="smv" placeholder="e.g., 15.0" required class="w-full p-3 border border-gray-300 rounded-lg bg-gray-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
+                    </div>
+                    <!-- Over Time -->
+                    <div>
+                        <label for="over_time" class="block text-gray-700 text-sm font-semibold mb-2">Over Time (minutes)</label>
+                        <input type="number" id="over_time" name="over_time" placeholder="e.g., 7200" required class="w-full p-3 border border-gray-300 rounded-lg bg-gray-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
+                    </div>
+                    <!-- Incentive -->
+                    <div>
+                        <label for="incentive" class="block text-gray-700 text-sm font-semibold mb-2">Incentive</label>
+                        <input type="number" id="incentive" name="incentive" placeholder="e.g., 0, 100" required class="w-full p-3 border border-gray-300 rounded-lg bg-gray-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
+                    </div>
+                    <!-- Idle Time -->
+                    <div>
+                        <label for="idle_time" class="block text-gray-700 text-sm font-semibold mb-2">Idle Time (minutes)</label>
+                        <input type="number" step="0.01" id="idle_time" name="idle_time" placeholder="e.g., 0.0" required class="w-full p-3 border border-gray-300 rounded-lg bg-gray-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
+                    </div>
+                    <!-- Idle Men -->
+                    <div>
+                        <label for="idle_men" class="block text-gray-700 text-sm font-semibold mb-2">Idle Men</label>
+                        <input type="number" id="idle_men" name="idle_men" placeholder="e.g., 0, 1" required class="w-full p-3 border border-gray-300 rounded-lg bg-gray-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
+                    </div>
+                    <!-- No. of Style Change -->
+                    <div>
+                        <label for="no_of_style_change" class="block text-gray-700 text-sm font-semibold mb-2">No. of Style Change</label>
+                        <input type="number" id="no_of_style_change" name="no_of_style_change" placeholder="e.g., 0, 1, 2" required class="w-full p-3 border border-gray-300 rounded-lg bg-gray-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
+                    </div>
+                    <!-- No. of Workers -->
+                    <div>
+                        <label for="no_of_workers" class="block text-gray-700 text-sm font-semibold mb-2">No. of Workers</label>
+                        <input type="number" step="0.01" id="no_of_workers" name="no_of_workers" placeholder="e.g., 20.0" required class="w-full p-3 border border-gray-300 rounded-lg bg-gray-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
+                    </div>
+                    <!-- Month -->
+                    <div>
+                        <label for="month" class="block text-gray-700 text-sm font-semibold mb-2">Month</label>
+                        <input type="number" id="month" name="month" placeholder="e.g., 1 (Jan) to 12 (Dec)" required class="w-full p-3 border border-gray-300 rounded-lg bg-gray-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-bold py-4 px-6 rounded-lg shadow-lg transition-all duration-300 ease-in-out transform hover:scale-105 hover:-translate-y-1 hover:shadow-xl hover:from-cyan-500 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 mt-6">
+                    Predict Productivity
+                </button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
